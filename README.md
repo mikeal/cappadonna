@@ -5,7 +5,7 @@ Headless browser testing for tap with coverage reporting.
 Cappadonna merges several tools together for integrated testing.
 
 * [tap](http://www.node-tap.org/): as the base test framework.
-* [puppetter](https://github.com/GoogleChrome/puppeteer): for headless browser access (Chrome).
+* [puppeteer](https://github.com/GoogleChrome/puppeteer): for headless browser access (Chrome).
 * [browserify](http://browserify.org/): for bundling.
 * [nyc/istanbul](https://istanbul.js.org/): for test coverage.
 
