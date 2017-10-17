@@ -1,6 +1,6 @@
 {
   "name": "cappadonna",
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "description": "Headless browser testing for tap with coverage reporting.",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "codecov": "^2.3.1",
     "cz-conventional-changelog": "^2.0.0",
     "husky": "^0.14.3",
-    "semantic-release": "^8.0.3",
+    "semantic-release": "^8.2.0",
     "standard": "^10.0.3",
     "validate-commit-msg": "^2.14.0"
   },
@@ -29,5 +29,9 @@
     "browserify-istanbul": "^3.0.1",
     "puppeteer": "git+https://github.com/mikeal/puppeteer.git#coverage",
     "tap": "^10.7.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikeal/cappadonna.git"
   }
 }
