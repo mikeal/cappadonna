@@ -1,0 +1,33 @@
+{
+  "name": "cappadonna",
+  "version": "0.1.0",
+  "description": "Headless browser testing for tap with coverage reporting.",
+  "main": "index.js",
+  "scripts": {
+    "test": "tap tests/test-*.js --100",
+    "commit": "git-cz",
+    "posttest": "standard",
+    "precommit": "npm test",
+    "prepush": "npm test",
+    "commitmsg": "validate-commit-msg",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+  },
+  "keywords": [],
+  "author": "Mikeal Rogers <mikeal.rogers@gmail.com> (http://www.mikealrogers.com)",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "codecov": "^2.3.1",
+    "cz-conventional-changelog": "^2.0.0",
+    "husky": "^0.14.3",
+    "semantic-release": "^8.0.3",
+    "standard": "^10.0.3",
+    "validate-commit-msg": "^2.14.0"
+  },
+  "dependencies": {
+    "bl": "^1.2.1",
+    "browserify": "^14.4.0",
+    "browserify-istanbul": "^3.0.1",
+    "puppeteer": "git+https://github.com/mikeal/puppeteer.git#coverage",
+    "tap": "^10.7.2"
+  }
+}

@@ -1,0 +1,3 @@
+window.capaTest = () => {
+  return 'pass'
+}
