@@ -5,7 +5,8 @@ const istanbul = require('browserify-istanbul')
 const puppeteer = require('puppeteer')
 const bl = require('bl')
 const path = require('path')
-const {test} = require('tap')
+const tap = require('tap')
+const test = tap.test
 
 const COVERAGE_FOLDER = path.join(process.cwd(), '.nyc_output')
 
@@ -137,6 +138,8 @@ module.exports = (entryPoint, opts = {}) => {
       }
     })
   }
+
+  _test.tap = tap
 
   return _test
 }
