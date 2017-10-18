@@ -1,4 +1,4 @@
-/* globals cappadonna_proxy_t */
+/* globals cappadonna_proxy_t, cv_proxy_add */
 const fs = require('fs')
 const browserify = require('browserify')
 const istanbul = require('browserify-istanbul')
@@ -6,6 +6,7 @@ const puppeteer = require('puppeteer')
 const bl = require('bl')
 const path = require('path')
 const tap = require('tap')
+const {createHash} = require('crypto')
 const test = tap.test
 
 const COVERAGE_FOLDER = path.join(process.cwd(), '.nyc_output')
@@ -90,6 +91,40 @@ module.exports = (entryPoint, opts = {}) => {
             throw new Error(msg)
           }
         })
+        const cvobjects = {}
+        Object.keys(global.__coverage__).forEach(filename => {
+          const hash = createHash('sha1')
+          hash.update(filename)
+          const key = parseInt(hash.digest('hex').substr(0, 12), 16).toString(36)
+          cvobjects[key] = global.__coverage__[filename]
+        })
+        await page.exposeFunction('cv_proxy_add', async arr => {
+          arr = JSON.parse(arr)
+          let obj = cvobjects
+          while (arr.length > 1) {
+            obj = obj[arr.shift()]
+          }
+          obj[arr.shift()]++
+        })
+        await page.evaluate(keys => {
+          const createProxy = parents => {
+            return new Proxy({}, {
+              get: (target, name) => 0,
+              set: (obj, prop, value) => {
+                const arr = parents.concat([prop])
+                cv_proxy_add(JSON.stringify(arr))
+                return true
+              }
+            })
+          }
+          keys.forEach(key => {
+            window[`cov_${key}`] = {
+              f: createProxy([key, 'f']),
+              s: createProxy([key, 's']),
+              b: createProxy([key, 'b'])
+            }
+          })
+        }, Object.keys(cvobjects))
       }
 
       await page.exposeFunction('cappadonna_proxy_t', async args => {

@@ -27,7 +27,7 @@
     "bl": "^1.2.1",
     "browserify": "^14.4.0",
     "browserify-istanbul": "^3.0.1",
-    "puppeteer": "git+https://github.com/mikeal/puppeteer.git#coverage",
+    "puppeteer": "^0.12.0",
     "tap": "^10.7.2"
   },
   "repository": {
