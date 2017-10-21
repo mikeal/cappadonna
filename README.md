@@ -2,6 +2,12 @@
 
 Headless browser testing for tap with coverage reporting.
 
+<p>
+  <a href="https://www.patreon.com/bePatron?u=880479">
+    <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" height="40px" />
+  </a>
+</p>
+
 Cappadonna merges several tools together for integrated testing.
 
 * [tap](http://www.node-tap.org/): as the base test framework.
