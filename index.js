@@ -80,6 +80,15 @@ module.exports = (entryPoint, opts = {}) => {
       /* istanbul ignore next */
       page.on('pageerror', msg => { throw new Error(`Page Error: ${msg}`) })
 
+      await page.evaluate(() => {
+        window.addEventListener('unhandledrejection', event => {
+          /* istanbul ignore next */
+          let msg = event.reason.stack || event.reason.message
+          /* istanbul ignore next */
+          console.error('[unhandledrejection]', msg)
+        })
+      })
+
       await page.addScriptTag({content: await bundle})
 
       /* istanbul ignore else */
