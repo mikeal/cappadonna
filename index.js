@@ -184,6 +184,7 @@ module.exports = (entryPoint, opts = {}) => {
   }
 
   _test.tap = tap
+  _test.bundle = bundle
 
   return _test
 }
