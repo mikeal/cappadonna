@@ -1,10 +1,5 @@
 language: node_js
 dist: trusty
-# addons:
-#   apt:
-#     packages:
-#       # This is required to run new chrome on old trusty
-#       - libnss3
 cache:
   directories:
     - node_modules
