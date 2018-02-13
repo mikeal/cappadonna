@@ -10,7 +10,8 @@
     "precommit": "npm test",
     "prepush": "npm test",
     "commitmsg": "validate-commit-msg",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "travis-deploy-once": "travis-deploy-once",
+    "semantic-release": "semantic-release"
   },
   "keywords": [],
   "author": "Mikeal Rogers <mikeal.rogers@gmail.com> (http://www.mikealrogers.com)",
@@ -19,7 +20,7 @@
     "codecov": "^3.0.0",
     "cz-conventional-changelog": "^2.1.0",
     "husky": "^0.14.3",
-    "semantic-release": "^12.2.0",
+    "semantic-release": "^12.4.1",
     "standard": "^10.0.3",
     "validate-commit-msg": "^2.14.0"
   },
@@ -27,8 +28,8 @@
     "bl": "^1.2.1",
     "browserify": "^15.0.0",
     "browserify-istanbul": "^3.0.1",
-    "puppeteer": "^0.13.0",
-    "tap": "^11.0.1"
+    "puppeteer": "^1.0.0",
+    "tap": "^11.1.0"
   },
   "repository": {
     "type": "git",

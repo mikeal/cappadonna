@@ -71,7 +71,11 @@ module.exports = (entryPoint, opts = {}) => {
     return test(name, async t => {
       const _browser = await browser
       const page = await _browser.newPage()
-      await page.setContent(index)
+      if (opts.location) {
+        await page.goto(opts.location)
+      } else {
+        await page.setContent(index)
+      }
 
       /* istanbul ignore next */
       page.on('console', msg => console.log(msg.text))
