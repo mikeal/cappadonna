@@ -22,6 +22,7 @@
     "husky": "^0.14.3",
     "semantic-release": "^12.4.1",
     "standard": "^10.0.3",
+    "travis-deploy-once": "^4.3.4",
     "validate-commit-msg": "^2.14.0"
   },
   "dependencies": {
