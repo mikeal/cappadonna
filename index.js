@@ -48,7 +48,7 @@ const index = `
 
 /* istanbul ignore next */
 module.exports = (entryPoint, opts = {}) => {
-  const browser = puppeteer.launch({args: ['--no-sandbox']})
+  const browser = puppeteer.launch({args: ['--no-sandbox']})//, headless: false})
 
   const bundle = new Promise((resolve, reject) => {
     var b = browserify()
@@ -56,7 +56,13 @@ module.exports = (entryPoint, opts = {}) => {
     if (global.__coverage__) {
       b.transform(istanbul, opts.istanbul)
     }
-    b.add(entryPoint)
+
+    if (opts.require) {
+      b.require(entryPoint, opts.require)
+    } else {
+      b.add(entryPoint)
+    }
+
     b.bundle().pipe(bl((err, buff) => {
       /* istanbul ignore next */
       if (err) return reject(err)
@@ -78,7 +84,7 @@ module.exports = (entryPoint, opts = {}) => {
       }
 
       /* istanbul ignore next */
-      page.on('console', msg => console.log(msg.text))
+      page.on('console', msg => console.log(msg.text()))
       /* istanbul ignore next */
       page.on('error', err => { throw err })
       /* istanbul ignore next */
@@ -93,17 +99,23 @@ module.exports = (entryPoint, opts = {}) => {
         })
       })
 
-      await page.addScriptTag({content: await bundle})
+      const code = await bundle
+      await page.addScriptTag({content: code})
 
       /* istanbul ignore else */
       if (global.__coverage__) {
-        await page.evaluate(() => {
-          /* istanbul ignore if */
-          if (!window.__coverage__) {
-            let msg = 'Coverage is enabled but is missing from your bundle.'
-            throw new Error(msg)
-          }
-        })
+        if (!opts.require) {
+          await page.evaluate(() => {
+            /* istanbul ignore if */
+            if (!window.__coverage__) {
+              let msg = 'Coverage is enabled but is missing from your bundle.'
+              throw new Error(msg)
+            }
+          })
+        } else if (code.indexOf('__coverage__') === -1) {
+          throw new Error('Coverage is enabled but is missing from your bundle.')
+        }
+
         const cvobjects = {}
         Object.keys(global.__coverage__).forEach(filename => {
           const hash = createHash('sha1')
