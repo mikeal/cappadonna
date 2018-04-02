@@ -40,7 +40,7 @@ const index = path.join(__dirname, 'index.html')
 
 /* istanbul ignore next */
 module.exports = (entryPoint, opts = {}) => {
-  const browser = puppeteer.launch({args: ['--no-sandbox']})//, headless: false})
+  const browser = puppeteer.launch({args: ['--no-sandbox']})
 
   const bundle = new Promise((resolve, reject) => {
     var b = browserify()
