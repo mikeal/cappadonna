@@ -36,15 +36,7 @@ const outputCoverage = (page) => {
   })
 }
 
-const index = `
-<!DOCTYPE html>
-  <head>
-    <meta charset="UTF-8">
-  </head>
-  <body>
-  </body>
-</html>
-`
+const index = path.join(__dirname, 'index.html')
 
 /* istanbul ignore next */
 module.exports = (entryPoint, opts = {}) => {
@@ -56,7 +48,13 @@ module.exports = (entryPoint, opts = {}) => {
     if (global.__coverage__) {
       b.transform(istanbul, opts.istanbul)
     }
-    b.add(entryPoint)
+
+    if (opts.require) {
+      b.require(entryPoint, opts.require)
+    } else {
+      b.add(entryPoint)
+    }
+
     b.bundle().pipe(bl((err, buff) => {
       /* istanbul ignore next */
       if (err) return reject(err)
@@ -71,14 +69,15 @@ module.exports = (entryPoint, opts = {}) => {
     return test(name, async t => {
       const _browser = await browser
       const page = await _browser.newPage()
-      if (opts.location) {
-        await page.goto(opts.location)
-      } else {
-        await page.setContent(index)
-      }
+
+      // we use a file url here so that the default page gets loaded in a secure context.
+      // required to test apis like https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto
+      // http://www.chromium.org/Home/chromium-security/security-faq#TOC-Which-origins-are-secure-
+
+      await page.goto(opts.location || 'file://' + index)
 
       /* istanbul ignore next */
-      page.on('console', msg => console.log(msg.text))
+      page.on('console', msg => console.log(msg.text()))
       /* istanbul ignore next */
       page.on('error', err => { throw err })
       /* istanbul ignore next */
@@ -93,17 +92,23 @@ module.exports = (entryPoint, opts = {}) => {
         })
       })
 
-      await page.addScriptTag({content: await bundle})
+      const code = await bundle
+      await page.addScriptTag({content: code})
 
       /* istanbul ignore else */
       if (global.__coverage__) {
-        await page.evaluate(() => {
-          /* istanbul ignore if */
-          if (!window.__coverage__) {
-            let msg = 'Coverage is enabled but is missing from your bundle.'
-            throw new Error(msg)
-          }
-        })
+        if (!opts.require) {
+          await page.evaluate(() => {
+            /* istanbul ignore if */
+            if (!window.__coverage__) {
+              let msg = 'Coverage is enabled but is missing from your bundle.'
+              throw new Error(msg)
+            }
+          })
+        } else if (code.indexOf('__coverage__') === -1) {
+          throw new Error('Coverage is enabled but is missing from your bundle.')
+        }
+
         const cvobjects = {}
         Object.keys(global.__coverage__).forEach(filename => {
           const hash = createHash('sha1')

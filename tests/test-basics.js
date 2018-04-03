@@ -21,9 +21,10 @@ test('basics', async (page, t) => {
 })
 
 test('appendAndWait', async (page, t) => {
-  t.plan(1)
+  t.plan(2)
   await page.appendAndWait('<test-me>pass</test-me>', 'test-me')
   await page.evaluate(async () => {
+    t.ok(window.isSecureContext, 'load default page from file url so we have a secure context')
     t.same('pass', document.querySelector('test-me').textContent)
   })
 })

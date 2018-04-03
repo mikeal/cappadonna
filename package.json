@@ -29,7 +29,7 @@
     "bl": "^1.2.1",
     "browserify": "^15.0.0",
     "browserify-istanbul": "^3.0.1",
-    "puppeteer": "^1.0.0",
+    "puppeteer": "^1.2.0",
     "tap": "^11.1.0"
   },
   "repository": {
